@@ -1,0 +1,21 @@
+@font-face {
+  font-family: 'GoT ';
+  src: url(GameOfThrones.ttf);
+}
+
+/* Primary colors: 
+  #334559 washington blue
+  #F1EDDE ancient ivory 
+  #656663 gray (kendal charcoal)
+  #D5D0C5 skipping stone
+*/
+
+body {
+  font-family: "GoT";
+  background-color: #F1EDDE;
+  color: #555;
+}
+
+h1 {
+  font-family: 'GoT';
+}
