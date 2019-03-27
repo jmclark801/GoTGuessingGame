@@ -1,0 +1,81 @@
+/* /* Tutor review:
+  - Can't figure out how to get custom fonts working! 
+  - git issues
+  - play sounds
+  - use API to bring in characters etc.
+*/
+
+
+@font-face {
+  font-family: 'GoT';
+  src: url(GameOfThrones.ttf);
+}
+
+body .background {
+  font-family: "GoT";
+  color: #F1EDDE;
+  min-height: 700px;
+}
+
+.background {
+  background-size: cover;
+  background-image: url("images/background.jpg");
+}
+
+.col-6 p {
+  font-size: 20px;
+  margin: 5px;
+  padding: 15px;
+}
+
+#close-button {
+  background-color: #334559;
+  border: none;
+  color: #F1EDDE;
+  font-size: 20px;
+  height: 60px;
+  margin-left: 15px;
+  width: 120px;
+}
+
+#begin-button {
+  background-color: #777;
+  border: none;
+  color: #F1EDDE;
+  font-size: 20px;
+  height: 60px;
+  margin-left: 15px;
+  width: 120px;
+
+}
+
+header h1 {
+  color: #F1EDDE;
+  font-family: 'GoT';
+  margin-bottom: 0px;
+  padding: 15px;
+}
+
+#h2 {
+  font-size: 22px;
+  letter-spacing: 2px;
+  padding: 15px;
+}
+header {
+  background-color: black;
+}
+
+#lettersGuessed {
+  letter-spacing: 15px;
+}
+
+#play-again-modal{
+  background-color: black;
+  opacity: .9 ;
+}
+
+#modal-dialog{
+  background-color: #D5D0C5;
+  z-index: 1;
+}
+

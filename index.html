@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Game of Thrones Character Match Game</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="assets/styles.css">
+  <link rel="shortcut icon" href="assets/images/favicon.ico"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body class="container">
+  <header>
+    <h1>#</h1>  <!--This uses a special font to render the logo -->
+  </header>
+  <div class="background">
+    <div class="game-wrapper">
+      <h2 id="h2">Press Begin to guess who will sit on the Iron Throne!</h2>
+      <div class="row">
+        <div class="col-6">
+        </div>
+        <div class="col-6">
+          <p id="wins">Wins: 0</p>
+          <p>Current Word:</p>
+          <p id="wordToGuess"></p>
+          <p>Guesses Remaining:</p>
+          <p id="guessesRemaining"></p>
+          <p>Letters guessed:</p>
+          <p id="lettersGuessed"></p>
+            <button id="begin-button" class="btn btn-primary" onclick="newGame()">Begin</button> 
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+  </footer>
+  <!-- Modal -->  
+  <div class="modal" id="play-again-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+      <div class="modal-dialog" id="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-title">Replace with win/lose condition</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="modal-body">
+            I need to update this content using the innerHTML or innerText to show whether the user won or lost!
+            <!-- 
+            Things to add:
+            - You win or You lost modal with play again button
+            Bonus - play song or make sound when user wins.
+            ** This image could go into the modal announcing the answer **
+            ** when the game is done if we can get the api working **
+            <div class="image-wrapper">
+            <img src="https://via.placeholder.com/250">
+            -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="close-button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" id="begin-button" class="btn btn-primary" onclick="newGame()">Play Again</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="assets/main.js"></script>
+</body>
+</html>
