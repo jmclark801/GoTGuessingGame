@@ -1,19 +1,12 @@
-// When game is done - remove alerts and instead pop a modal
-// clear letters on game end rather than game begin for losing games
-// Update button text 'play again?'
-// Initial Setup of variables
-// Disable Begin button after initial game launch
-
-// var characters = [
-//   "Eddard Stark", "Robert Baratheon", "Jaime Lannister", "Catelyn Stark", "Cersei Lannister",  "Daenerys Targaryen",  "Jorah Mormont", "Viserys Targaryen", "Jon Snow", "Sansa Stark", "Arya Stark", "Robb Stark", "Theon Greyjoy", "Bran Stark", "Joffrey Baratheon", "Sandor Clegane", "Tyrion Lannister", "Khal Drogo", "Petyr Baelish", "Davos Seaworth", "Samwell Tarly", "Stannis Baratheon", "Melisandre", "Jeor Mormont",
-//   "Bronn", "Varys", "Shae", "Margaery Tyrell", "Tywin Lannister", "Talisa Maegyr", "Ygritte", "Gendry", "Tormund Giantsbane", "Brienne of Tarth", "Ramsay Bolton", "Gilly", "Daario Naharis", "Missandei", "Ellaria Sand", "Tommen Baratheon", "Jaqen Hghar", "Roose Bolton"];
+// Initial global variable declarations
 var characters = [];
 var wins = 0;
 var numberOfGuesses = 12;
 var lettersGuessed = [];
 var displayedCharacter = [];
 var randomCharacter = "";
-var randomCharacterArray = [];
+var characterImagePath = ""
+var randomCharacterArray = []; // can I delete this?
 var stopGame = false;
 
 // Make initial API call
@@ -24,32 +17,38 @@ request.onload = function() {
   var data = JSON.parse(this.response)
   if (request.status >= 200 && request.status < 400) {
     data.forEach(character => {
-      if (character.pageRank > 200){
-        console.log(character.name)
-        console.log("https://api.got.show" + character.imageLink);
+   
+      if (character.pageRank > 200 && character.imageLink){
         characters.push({
           name: character.name,
           image: "https://api.got.show" + character.imageLink
         });
       }
     })
+    console.log(data);
   } else {
     console.log('error')
   }
-  console.log(characters);
 }
 request.send()
 
 
 // Utility Functions
 function resetGame () {
+  // Reset variables from previous games
   numberOfGuesses = 12;
   lettersGuessed = [];
   randomCharacter = "";
   randomCharacterArray = [];
   displayedCharacter = [];
   stopGame = false;
-  randomCharacter = characters[Math.floor(Math.random() * characters.length)].name;
+  randomNumber = Math.floor(Math.random() * characters.length)
+  randomCharacter = characters[randomNumber].name;
+  characterImagePath = "https://api.got.show/" + characters[randomNumber].imageLink;
+  console.log(characterImagePath);
+  console.log(randomCharacter);
+  
+  // "https://api.got.show" + character.imageLink
   $('#play-again-modal').modal('hide');
   document.getElementById('guessesRemaining').innerText = numberOfGuesses;
   document.getElementById('wordToGuess').innerText = "_ ".repeat(randomCharacter.length);
@@ -68,7 +67,6 @@ function determineIfMatch(userGuess){
       displayedCharacter[i] = userGuess;
     }
   }
-  console.log(displayedCharacter);
 }
 
 function determineIfWinner(){
@@ -106,6 +104,8 @@ function preventSpacebarDefault(event){
 }
 
 function loseScenario(){
+  var characterImage = document.createElement("img");
+  characterImage.src = characterImagePath
   console.log("You lost!");
   $('#play-again-modal').modal('show');
   document.getElementById('modal-title').innerText = "Sorry, you lost.  The correct Answer was...";
@@ -115,16 +115,21 @@ function loseScenario(){
 }
 
 function winScenario(){
+  var imageElement = document.getElementById('modal-body');
+  var characterImage = document.createElement("img");
+  characterImage.src = characterImagePath
   console.log("You won!");  
   wins += 1;
   $('#play-again-modal').modal('show');
-  document.getElementById('modal-title').innerText = "Congratulations, you won! The correct Answer was...";
+  document.getElementById('modal-title').innerText = "Congratulations, you won! The correct Answer was..." + randomCharacter;
   document.getElementById('modal-body').innerText = randomCharacter;
   document.getElementById('wins').innerHTML = "Wins: " + wins;
+  imageElement.append(characterImage);
 }
 
 // Main Game 
 function newGame () {
+console.log("this is being logged");
  resetGame();
  formatDisplayedCharacter(randomCharacter);
  document.onkeyup = function(event){
