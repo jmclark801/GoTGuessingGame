@@ -33,9 +33,9 @@ body .background {
   border: none;
   color: #F1EDDE;
   font-size: 20px;
-  height: 60px;
+  height: 65px;
   margin-left: 15px;
-  width: 120px;
+  width: 130px;
 }
 
 #begin-button {
@@ -43,10 +43,13 @@ body .background {
   border: none;
   color: #F1EDDE;
   font-size: 20px;
-  height: 60px;
+  height: 65px;
   margin-left: 15px;
-  width: 120px;
+  width: 130px;
+}
 
+div p , div button {
+  letter-spacing: 2px;
 }
 
 header h1 {
@@ -77,5 +80,9 @@ header {
 #modal-dialog{
   background-color: #D5D0C5;
   z-index: 1;
+}
+
+#wordToGuess {
+  letter-spacing: 3px;
 }
 

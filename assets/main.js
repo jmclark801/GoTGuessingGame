@@ -6,8 +6,9 @@ var lettersGuessed = [];
 var displayedCharacter = [];
 var randomCharacter = "";
 var characterImagePath = ""
-var randomCharacterArray = []; // can I delete this?
-var stopGame = false;
+var randomCharacterArray = []; 
+var audio = new Audio('assets/music/GameOfThronesTheme.mp3');
+
 
 // Make initial API call
 var request = new XMLHttpRequest()
@@ -25,67 +26,75 @@ request.onload = function() {
         });
       }
     })
-    console.log(data);
   } else {
-    console.log('error')
+    console.log('An error was experienced while loading the character data');
   }
 }
 request.send()
 
-
 // Utility Functions
-function resetGame () {
-  // Reset variables from previous games
+// Reset variables from previous games
+function resetGame() {
   numberOfGuesses = 12;
   lettersGuessed = [];
   randomCharacter = "";
   randomCharacterArray = [];
   displayedCharacter = [];
-  stopGame = false;
   randomNumber = Math.floor(Math.random() * characters.length)
   randomCharacter = characters[randomNumber].name;
-  characterImagePath = "https://api.got.show/" + characters[randomNumber].imageLink;
-  console.log(characterImagePath);
-  console.log(randomCharacter);
-  
-  // "https://api.got.show" + character.imageLink
+  characterImage = characters[randomNumber].image;
+  $("#begin-button").html('Play Again');
   $('#play-again-modal').modal('hide');
   document.getElementById('guessesRemaining').innerText = numberOfGuesses;
-  document.getElementById('wordToGuess').innerText = "_ ".repeat(randomCharacter.length);
+  document.getElementById('wordToGuess').innerText = "_".repeat(randomCharacter.length);
+  // The character selected is logged so that win scenarios can be tested easily.
+  console.log(randomCharacter);
 }
 
+// Format the chracter to display underscores and spaces. Spaces are given to the user so they don't need to use a guess on them.
 function formatDisplayedCharacter(randomCharacter){
   randomCharacterArray = randomCharacter.split('');
   for(i= 0; i <randomCharacterArray.length; i++){
-    displayedCharacter.push("_ ")
+    if (randomCharacterArray[i] === " ") {
+      displayedCharacter.push(" ")
+    } else {
+    displayedCharacter.push("_")
+    }
   }
 }
 
+// Determine  if the user's guess matches any letters in the hidden word.
 function determineIfMatch(userGuess){
   for(i=0; i < displayedCharacter.length; i++){
     if(userGuess === randomCharacterArray[i] || userGuess.toUpperCase() === randomCharacterArray[i]){
       displayedCharacter[i] = userGuess;
     }
   }
+  if (randomCharacterArray.indexOf(userGuess) == -1 && numberOfGuesses > 0) {
+    numberOfGuesses = numberOfGuesses -1;
+  }
 }
 
 function determineIfWinner(){
-  if (numberOfGuesses <= 0){
-    loseScenario();
+  if (numberOfGuesses === 0){
+    displayResults("Lose");
   } else if (displayedCharacter.join('').toUpperCase() === randomCharacterArray.join('').toUpperCase()) {
-    winScenario();
+    displayResults("Win");
   } 
 }
 
 function evaluateGuess(keyPressed){
   var userGuess = ""
+  var eligibleGuesses = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
   if (keyPressed !=="Meta"){
     userGuess = keyPressed;
   }
-  if (!lettersGuessed.includes(userGuess)){
-    lettersGuessed.push(userGuess);
-    numberOfGuesses -= 1;
+  if (eligibleGuesses.includes(userGuess)){
+    // If the letter hasn't been guessed, add it to the lettersGuessed array.
+    if (!lettersGuessed.includes(userGuess)){
+      lettersGuessed.push(userGuess);
+    }
   }
   determineIfMatch(userGuess);
   determineIfWinner();
@@ -95,41 +104,33 @@ function evaluateGuess(keyPressed){
   document.getElementById('lettersGuessed').innerHTML = lettersGuessed.join('');
 }
 
-// This function is needed to allow the spacebar to be used as a valid guess
-// and preventing it from submitting the button which will reset the game.
+// This function is needed to prevent the spacebar from restarting the game accidentally
 function preventSpacebarDefault(event){
   if ( event.which === 32 ) {
     event.preventDefault();
   }
 }
 
-function loseScenario(){
-  var characterImage = document.createElement("img");
-  characterImage.src = characterImagePath
-  console.log("You lost!");
+// Upate the modal depending on if the user won or lost.
+function displayResults(result){
   $('#play-again-modal').modal('show');
-  document.getElementById('modal-title').innerText = "Sorry, you lost.  The correct Answer was...";
-  document.getElementById('modal-body').innerText = randomCharacter;
+  if (result ==="Lose"){
+    document.getElementById('modal-title').innerText = "Sorry, you lost.  The correct Answer was..." + randomCharacter;
+  } else if (result==="Win"){
+    document.getElementById('modal-title').innerText = "Congratulations, You Won!  You correctly guess " + randomCharacter;
+    wins += 1;
+    document.getElementById('wins').innerText = "Wins: " + wins;
+  }
+  $("#character-image").attr("src", characterImage);
+  audio.play();
+  setTimeout(function () {
+      audio.pause();
+    }, 3000);
   lettersGuessed = [];
-  
-}
-
-function winScenario(){
-  var imageElement = document.getElementById('modal-body');
-  var characterImage = document.createElement("img");
-  characterImage.src = characterImagePath
-  console.log("You won!");  
-  wins += 1;
-  $('#play-again-modal').modal('show');
-  document.getElementById('modal-title').innerText = "Congratulations, you won! The correct Answer was..." + randomCharacter;
-  document.getElementById('modal-body').innerText = randomCharacter;
-  document.getElementById('wins').innerHTML = "Wins: " + wins;
-  imageElement.append(characterImage);
 }
 
 // Main Game 
 function newGame () {
-console.log("this is being logged");
  resetGame();
  formatDisplayedCharacter(randomCharacter);
  document.onkeyup = function(event){
